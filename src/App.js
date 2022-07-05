@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
-import { Routes, Route, Link } from 'react-router-dom'
+import { 
+  Routes, Route, Link, useMatch
+} from 'react-router-dom'
 
 // ---> navigation
 const Menu = () => {
@@ -17,14 +19,22 @@ const Menu = () => {
 }
 
 // ---> a component to be routed
-const AnecdoteList = ({ anecdotes }) => (
-  <div>
-    <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
-    </ul>
-  </div>
-)
+const AnecdoteList = ({ anecdotes }) => {
+  return (
+    <div>
+      <h2>Anecdotes</h2>
+      <ul>
+        {anecdotes.map(anecdote => {
+          return (
+            <li key={anecdote.id} >
+              <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
 
 // ---> a component to be routed
 const About = () => (
@@ -50,7 +60,7 @@ const Footer = () => (
   </div>
 )
 
-// ---> a componentto be routed
+// ---> a component to be routed
 const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
@@ -90,7 +100,28 @@ const CreateNew = (props) => {
 
 }
 
-// ---> Top Component
+const Anecdote = ({anecdote}) => {
+  // Shape of the object received
+  // {
+  //   content: 'If it hurts, do it more often',
+  //   author: 'Jez Humble',
+  //   info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
+  //   votes: 0,
+  //   id: 1
+  // }
+
+  // debugger
+
+  return (
+    <div>
+      <h2>{anecdote.content}</h2>
+      <p>has {anecdote.votes} votes</p>
+      <p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p>
+    </div>
+  )
+}
+
+// ---> APP Component
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -110,6 +141,10 @@ const App = () => {
   ])
 
   const [notification, setNotification] = useState('')
+
+  const match = useMatch('/anecdotes/:id')
+  const anecdote = match ? 
+    anecdotes.find(a => a.id === +match.params.id) : null
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
@@ -138,6 +173,7 @@ const App = () => {
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />}/>
         <Route path='/create' element={<CreateNew addNew={addNew} />}/>
         <Route path='/about' element={<About />}/>
+        <Route path='/anecdotes/:id' element={<Anecdote anecdote={anecdote}/>}/>
       </Routes>
       <Footer />
     </div>
