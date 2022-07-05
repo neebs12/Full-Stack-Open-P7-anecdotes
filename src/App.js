@@ -64,16 +64,14 @@ const Footer = () => (
 
 // ---> a component to be routed
 const CreateNew = (props) => {
-  // const [content, setContent] = useState('')
-  // const [author, setAuthor] = useState('')
-  // const [info, setInfo] = useState('')
-  
   const content = useField('content')
   const author = useField('author')
   const info = useField('info')
+  const reset = useField('reset')
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    console.log('hello')
     props.addNew({
       content: content.value,
       author: author.value,
@@ -82,26 +80,31 @@ const CreateNew = (props) => {
     })
   }
 
+  const handleReset = () => {
+    const mockE = {target: {value: ''}}
+    content.onChange(mockE)
+    author.onChange(mockE)
+    info.onChange(mockE)
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          {/* <input name='content' value={content} onChange={(e) => setContent(e.target.value)} /> */}
           <input {...content}/>
         </div>
         <div>
           author
-          {/* <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} /> */}
           <input {...author}/>
         </div>
         <div>
           url for more info
-          {/* <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} /> */}
           <input {...info}/>
         </div>
         <button>create</button>
+        <input {...reset} onClick={handleReset}/>
       </form>
     </div>
   )

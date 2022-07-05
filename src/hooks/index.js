@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 // Create custom hooks here
-export const useField = (name) => {
+export const useField = (type) => {
   const [value, setValue] = useState('')
   
   const onChange = (e) => {
@@ -9,8 +9,13 @@ export const useField = (name) => {
     setValue(value)
   }
 
-  return {
-    type: 'text',
-    name, value, onChange,
+  if (type === 'reset') {
+    return { type }
+  } else {
+    return {
+      type, value, onChange,
+    }
   }
+
+
 }
