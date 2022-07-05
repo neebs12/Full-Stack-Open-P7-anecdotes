@@ -1,18 +1,22 @@
 import { useState } from 'react'
 
+import { Routes, Route, Link } from 'react-router-dom'
+
+// ---> navigation
 const Menu = () => {
   const padding = {
     paddingRight: 5
   }
   return (
     <div>
-      <a href='#' style={padding}>anecdotes</a>
-      <a href='#' style={padding}>create new</a>
-      <a href='#' style={padding}>about</a>
+      <Link style={padding} to='/'>anecdotes</Link>
+      <Link style={padding} to='/create'>create new</Link>
+      <Link style={padding} to='/about'>about</Link>
     </div>
   )
 }
 
+// ---> a component to be routed
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
@@ -22,6 +26,7 @@ const AnecdoteList = ({ anecdotes }) => (
   </div>
 )
 
+// ---> a component to be routed
 const About = () => (
   <div>
     <h2>About anecdote app</h2>
@@ -36,6 +41,7 @@ const About = () => (
   </div>
 )
 
+// ---> footer
 const Footer = () => (
   <div>
     Anecdote app for <a href='https://fullstackopen.com/'>Full Stack Open</a>.
@@ -44,6 +50,7 @@ const Footer = () => (
   </div>
 )
 
+// ---> a componentto be routed
 const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
@@ -83,6 +90,7 @@ const CreateNew = (props) => {
 
 }
 
+// ---> Top Component
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -126,9 +134,11 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
-      <AnecdoteList anecdotes={anecdotes} />
-      <About />
-      <CreateNew addNew={addNew} />
+      <Routes>
+        <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />}/>
+        <Route path='/create' element={<CreateNew addNew={addNew} />}/>
+        <Route path='/about' element={<About />}/>
+      </Routes>
       <Footer />
     </div>
   )
